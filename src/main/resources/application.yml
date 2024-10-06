@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/EZCart
+    username: postgres
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret:
+    key: FHeTXF1n+cm6xVpYjsMnP2L4p+kD3PVo6tHGehs+KiwifjcYzqJv3F3MN8CR0ZJ4EJt5z7LduhXT4SwcJkTWKw==
