@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class AuthService {
 
@@ -32,11 +34,35 @@ public class AuthService {
     public UserDto registerUser(UserDto dto) throws Exception {
         User exist=repository.findByUsername(dto.getUsername());
         if(exist==null){
+            dto.setRole("user");
             User user= UserMapper.mapDtoToUser(dto);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User saved=repository.save(user);
             UserDto savedDto=UserMapper.mapUserToDto(saved);
             return savedDto;
+        }
+
+        throw new Exception("User already exist");
+
+
+    }
+
+    public UserDto registerVendor(UserDto dto) throws Exception {
+        User exist=repository.findByUsername(dto.getUsername());
+        if(exist==null|| Objects.equals(exist.getRole(), "user")){
+            if(exist==null){
+                dto.setRole("vendor");
+                User user= UserMapper.mapDtoToUser(dto);
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                User saved=repository.save(user);
+                return UserMapper.mapUserToDto(saved);
+            }
+            else{
+                exist.setRole("vendor");
+                User saved=repository.save(exist);
+                return UserMapper.mapUserToDto(saved);
+            }
+
         }
 
         throw new Exception("User already exist");
