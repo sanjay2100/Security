@@ -1,5 +1,6 @@
 package com.example.security.security.Config.SecurityFilter;
 
+import com.example.security.security.Dto.ValidTokenDto;
 import com.example.security.security.Modals.User;
 import com.example.security.security.Repository.UserRepository;
 import com.example.security.security.Service.JwtService;
@@ -47,8 +48,8 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = getToken(request);
         if (token != null) {
             try {
-                boolean isValid = jwtService.ValidateToken(token);
-                if (isValid) {
+                ValidTokenDto isValid = jwtService.ValidateToken(token);
+                if (isValid.isValid()) {
                     String userName = redisService.getUserNameFromToken(token);
 
                     UserDetails user = context.getBean(UserDetailsService.class).loadUserByUsername(userName);

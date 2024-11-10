@@ -1,10 +1,14 @@
 package com.example.security.security.Service;
 
+import com.example.security.security.Dto.ValidTokenDto;
+import com.example.security.security.Modals.User;
+import com.example.security.security.Repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.apache.tomcat.websocket.AuthenticationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +21,10 @@ import java.util.Objects;
 @Service
 public class JwtService {
 
+    @Autowired
+    private UserRepository repository;
+    @Autowired
+    private RedisService redisService;
     @Value("${jwt.secret.key}")
     private String secretkey;
     public String generateToken(String username){
@@ -36,13 +44,16 @@ public class JwtService {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretkey));
     }
 
-    public boolean ValidateToken(String token) throws Exception{
+    public ValidTokenDto ValidateToken(String token) throws Exception{
         try{
             Jwts.parser()
                     .verifyWith((SecretKey) getKey())
                     .build()
                     .parseSignedClaims(token);
-            return true;
+            String username=redisService.getUserNameFromToken(token);
+            User userdetails=repository.findByUsername(username);
+
+            return new ValidTokenDto(true,userdetails.getId());
         }
         catch (Exception e){
             throw new AuthenticationException(e.getMessage());

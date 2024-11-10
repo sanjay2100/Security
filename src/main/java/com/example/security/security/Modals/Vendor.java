@@ -14,7 +14,16 @@ public class Vendor {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String userid;
+    @NonNull
     private String email;
+    @NonNull
     private String mobile;
+    @NonNull
     private String address;
+    @NonNull
+    private String state;
+    @NonNull
+    private String district;
+    @NonNull
+    private String pincode;
 }
