@@ -44,7 +44,7 @@ public class AuthService {
     public UserDto registerUser(UserDto dto) throws Exception {
         User exist=repository.findByUsername(dto.getUsername());
         if(exist==null){
-            dto.setRole("user");
+            dto.setRole("admin");
             User user= UserMapper.mapDtoToUser(dto);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User saved=repository.save(user);
@@ -86,11 +86,18 @@ public class AuthService {
                 exist.setRole("vendor");
                 vendor.setUserid(username);
                 User saved=repository.save(exist);
-                if(saved!=null){
-                    Vendor savedVendor=vendorRepository.save(vendor);
-                    VendorResponseDto vendorDto=VendorMapper.mapVendorToDto(savedVendor);
-                    return vendorDto;
+                Vendor mobileNumber=vendorRepository.findByMobile(vendor.getMobile());
+                if(mobileNumber!=null){
+                    if(saved!=null){
+                        Vendor savedVendor=vendorRepository.save(vendor);
+                        VendorResponseDto vendorDto=VendorMapper.mapVendorToDto(savedVendor);
+                        return vendorDto;
+                    }
                 }
+                else{
+                    throw new AuthenticationException("Mobile number alreday exist");
+                }
+
             }
 
         }

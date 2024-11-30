@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/EZCart
+    url: jdbc:postgresql://localhost:5432/VC
     username: postgres
-    password: postgres
+    password: password
 
   jpa:
     hibernate:
