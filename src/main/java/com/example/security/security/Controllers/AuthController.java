@@ -1,16 +1,15 @@
 package com.example.security.security.Controllers;
 
-import com.example.security.security.Dto.LoginDto;
-import com.example.security.security.Dto.SuccessDto;
-import com.example.security.security.Dto.UserDto;
-import com.example.security.security.Dto.ValidTokenDto;
+import com.example.security.security.Dto.*;
 import com.example.security.security.Service.AuthService;
 import com.example.security.security.Service.JwtService;
+import com.example.security.security.Service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,6 +21,9 @@ public class AuthController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
     @GetMapping("/")
     public String HelloWorld(){
         return "Hello World";
@@ -62,7 +64,17 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
             }
         };
+    @PostMapping("/userdetails/create")
+    public ResponseEntity<String> createUserDetails(@RequestBody UserDetailsDto userDetailsDto, @RequestHeader("Authorization")String token){
+        String response= userDetailsService.createUserDetails(userDetailsDto,token);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
+    @GetMapping("/userdetails/get_userdetails")
+    public ResponseEntity<UserDetailsDto> getAllUsers(@RequestHeader("Authorization")String token){
+        UserDetailsDto userDetailsDto=userDetailsService.getUserDetails(token);
+        return new ResponseEntity<>(userDetailsDto,HttpStatus.OK);
+    }
 
 
 }
