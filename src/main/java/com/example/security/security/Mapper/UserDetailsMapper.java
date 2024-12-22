@@ -8,6 +8,7 @@ public class UserDetailsMapper {
         return new UserDetails(
                 dto.getId(),
                 dto.getUserId(),
+                dto.getName(),
                 dto.getAddress(),
                 dto.getDistrict(),
                 dto.getState(),
@@ -21,6 +22,7 @@ public class UserDetailsMapper {
         return new UserDetailsDto(
                 model.getId(),
                 model.getUserId(),
+                model.getName(),
                 model.getAddress(),
                 model.getDistrict(),
                 model.getState(),

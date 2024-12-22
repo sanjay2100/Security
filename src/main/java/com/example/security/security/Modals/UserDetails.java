@@ -8,12 +8,14 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="user_details")
+@Table(name="userdetails")
 public class UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String userId;
+    @NonNull
+    private String name;
     @NonNull
     private String address;
     @NonNull
@@ -26,4 +28,19 @@ public class UserDetails {
     private String mobilenumber;
     @NonNull
     private String email;
+
+    @Override
+    public String toString() {
+        return "UserDetails{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", district='" + district + '\'' +
+                ", state='" + state + '\'' +
+                ", pincode='" + pincode + '\'' +
+                ", mobilenumber='" + mobilenumber + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

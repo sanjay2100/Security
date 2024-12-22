@@ -23,14 +23,39 @@ public class UserDetailsService {
     @Autowired
     private JwtService jwtService;
 
+
+    public boolean checkUserDetailAvailable(String token){
+        try{
+            String sub=token.substring(7);
+            ValidTokenDto isValid=jwtService.ValidateToken(sub);
+            if(isValid.isValid()==true){
+                UserDetails available=userDetailsRepo.getByUserId(isValid.getUsername());
+                if(available==null){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+            else{
+                throw new AuthenticationException("Invalid token");
+            }
+        }
+        catch (Exception ex){
+            throw new CustomException(ex.getMessage());
+        }
+    }
+
     public String createUserDetails(UserDetailsDto userDetailsdto, String token){
         try {
             String sub=token.substring(7);
             ValidTokenDto isValid=jwtService.ValidateToken(sub);
             if(isValid.isValid()==true){
                 userDetailsdto.setUserId(isValid.getUsername());
+                System.out.println(userDetailsdto.toString());
                 UserDetails userDetails= UserDetailsMapper.mapDtoToModal(userDetailsdto);
                 UserDetails saved=userDetailsRepo.save(userDetails);
+                System.out.println(saved.toString());
                 return "User details added successfully";
             }
             else{
@@ -39,7 +64,7 @@ public class UserDetailsService {
 
         }
         catch(Exception e){
-            throw new RuntimeException(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
 
     }
