@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 public interface VendorRepository extends JpaRepository<Vendor,String> {
     public Vendor findByUserid(String id);
+    public Vendor findByMobile(String mobile);
 }
