@@ -29,4 +29,9 @@ public class UserDetailsController {
         return new ResponseEntity<>(new SuccessDto(response),HttpStatus.CREATED);
     }
 
+    @PostMapping("/get_user_details")
+    public ResponseEntity<UserDetailsDto> getUserDetails(@RequestHeader (value = "Authorization") String token){
+        UserDetailsDto userDetailsDto=userDetailsService.getUserDetails(token);
+        return new ResponseEntity<>(userDetailsDto,HttpStatus.OK);
+    }
 }
